@@ -21,7 +21,7 @@ def generate_launch_description():
             namespace="nissan9/gps/duro",
             parameters=[
                 {
-                    "ip_address": "192.168.1.10",
+                    "ip_address": "192.168.11.112",
                     "port": 55555,
                     "gps_receiver_frame_id": "nissan9/duro_gps",
                     "imu_frame_id": "nissan9/duro_gps_imu",

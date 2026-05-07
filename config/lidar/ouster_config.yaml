@@ -1,0 +1,17 @@
+nissan9/os_driver:
+ ros__parameters:
+    sensor_hostname: 192.168.11.108  #'os1-122226002956.local'
+    udp_dest: '192.168.11.5'
+    mtp_dest: ''
+    mtp_main: false
+    lidar_mode: '1024x20'
+    timestamp_mode: 'TIME_FROM_ROS_TIME'
+    udp_profile_lidar: 'LEGACY'
+    metadata: ''
+    sensor_frame: 'nissan9/os_sensor'
+    lidar_frame: 'nissan9/os_lidar'
+    imu_frame: 'nissan9/os_imu'
+    lidar_port: 7503
+    imu_port: 7502
+    use_system_default_qos: true
+
