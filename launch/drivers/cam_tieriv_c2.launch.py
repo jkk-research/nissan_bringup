@@ -19,7 +19,7 @@ nissan_bringup_pkg_dir = get_package_share_directory('nissan_bringup')
 
 
 class CameraConfig(BaseModel):
-    name: str = 'camera1'
+    name: str = 'camera0'
     param_path: Path = Path(nissan_bringup_pkg_dir, 'config', 'camera', 'tieriv_c2_camera_params.yaml')
     remappings: Optional[List]
     namespace: Optional[str]

@@ -32,7 +32,7 @@ import os
 
 
 def generate_launch_description():
-    ouster_dir = get_package_share_directory('ros2_ouster')
+    leaf_dir = get_package_share_directory('nissan_bringup')
     parameter_file = LaunchConfiguration('params_file')
     ouster_full_namespace = LaunchConfiguration('ouster_full_ns')
     node_name = 'ouster_driver'
@@ -48,10 +48,15 @@ def generate_launch_description():
         description='Complete namespace for the Ouster driver')
 
     # Acquire the driver param file
-    params_declare = DeclareLaunchArgument('params_file',
-                                           default_value=os.path.join(
-                                            get_package_share_directory('nissan_bringup'), 'config','lidar', 'ouster_config.yaml'),
-                                           description='FPath to the ROS2 parameters file to use.')
+    params_declare = DeclareLaunchArgument(
+    'params_file',
+    default_value=os.path.join(
+        leaf_dir,
+        'config',
+        'lidar',
+        'ouster_config.yaml'
+    ),
+    description='FPath to the ROS2 parameters file to use.')
 
     driver_node = LifecycleNode(package='ros2_ouster',
                                 executable='ouster_driver',
@@ -99,9 +104,9 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        params_declare,
         ouster_namespace_declare,
         ouster_full_namespace_declare,
-        params_declare,
         driver_node,
         activate_event,
         configure_event,

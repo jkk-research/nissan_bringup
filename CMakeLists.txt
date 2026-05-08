@@ -11,9 +11,34 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(novatel_oem7_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+
+
+set(ament_dependencies
+  rclcpp
+  geometry_msgs
+  tf2
+  tf2_msgs
+  tf2_ros
+  tf2_geometry_msgs
+  novatel_oem7_msgs
+  nav_msgs
+)
+
+
+
 
 add_executable(global_parameter src/global_parameter_node.cpp)
-ament_target_dependencies(global_parameter rclcpp)
+ament_target_dependencies(global_parameter ${ament_dependencies})
+
+add_executable(nova_oem7_to_tf src/nova_oem7_to_tf.cpp)
+ament_target_dependencies(nova_oem7_to_tf ${ament_dependencies})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -29,6 +54,7 @@ endif()
 
 install(TARGETS
   global_parameter
+  nova_oem7_to_tf
   DESTINATION lib/${PROJECT_NAME}
 )
 
