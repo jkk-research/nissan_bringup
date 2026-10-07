@@ -11,7 +11,6 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='gyor0_tf_publisher',
             output='screen',
@@ -29,7 +28,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='zala0_tf_publisher',
             output='screen',
@@ -63,7 +61,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='duro_gps_tf_publisher',
             output='screen',
@@ -80,7 +77,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='duro_gps_imu_tf_publisher',
             output='screen',
@@ -97,7 +93,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='zed2_camera_center_tf_publisher',
             output='screen',
@@ -114,7 +109,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='base_link_ground_link_publisher',
             output='screen',
@@ -131,7 +125,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='os_left_tf_publisher',
             output='screen',
@@ -148,7 +141,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='os_right_tf_publisher',
             output='screen',
@@ -165,7 +157,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='os_sensor_lidar_left',
             output='screen',
@@ -182,7 +173,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='os_sensor_imu_left',
             output='screen',
@@ -199,7 +189,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='os_sensor_lidar_right',
             output='screen',
@@ -216,7 +205,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='os_sensor_imu_right',
             output='screen',
@@ -233,7 +221,6 @@ def generate_launch_description():
         ),
         Node(
             package='tf2_ros',
-            #namespace='nissan1',
             executable='static_transform_publisher',
             name='sick_tf_publisher',
             output='screen',

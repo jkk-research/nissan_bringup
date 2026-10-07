@@ -59,7 +59,7 @@
         converter:
             enabled: false
             topic_type: "Twist"        # Supported types: nav_msgs/{Twist, TwistWithCov, Odometry}
-            input_topic: "/robot/odom" # Input topic name
+            input_topic: "/nissan9/robot/odom" # Input topic name
             scale_factor: 1000.0       # To convert from the original unit of measurement to mm/s (note: this must be a float!)
             use_x: true                # Transmit the x axis of the input velocity
             use_y: false               # Transmit the y axis of the input velocity
@@ -67,6 +67,6 @@
 
         # Node parameters
         output_ns:   "/nissan9/fixposition"      # Namespace for output topics, leave empty to use node namespace
-        speed_topic: "/fixposition/speed"        # Wheelspeed input, empty to disable
-        corr_topic:  "/rtcm"                     # Correction data input, empty to disable
+        speed_topic: "/nissan9/fixposition/speed" # Wheelspeed input, empty to disable
+        corr_topic:  "/nissan9/rtcm"              # Correction data input, empty to disable
         qos_type:    "sensor_short"              # "sensor_short", "sensor_long", "default_short", "default_long"

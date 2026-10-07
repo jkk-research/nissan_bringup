@@ -33,16 +33,16 @@ public:
         this->declare_parameter<float>("z_coord_exact_height", 1.9);
         this->declare_parameter<float>("z_coord_offset_plus", -10.0);
         this->declare_parameter<std::string>("frame_id", "map");
-        this->declare_parameter<std::string>("child_frame_id", "lexus3/base_link");
+        this->declare_parameter<std::string>("child_frame_id", "nissan9/base_link");
         // z_coord_ref_switch can be exact / zero_based / orig / orig_offset
         // exact: the Z coorindinate is always z_coord_exact_height param (must be set in this launch)
         // zero_based: Z coordinate starts from 0 and relative
         // orig: the original Z provided by the sensor
         // orig_offset: the original Z plus a fixed offset
         this->declare_parameter<std::string>("z_coord_ref_switch", "orig");
-        this->declare_parameter<std::string>("pose_topic_pub", "lexus3/gps/nova/current_pose");
-        this->declare_parameter<std::string>("utm_topic_sub", "lexus3/gps/nova/bestutm");
-        this->declare_parameter<std::string>("inspva_topic_sub", "lexus3/gps/nova/inspva");
+        this->declare_parameter<std::string>("pose_topic_pub", "/nissan9/gps/nova/current_pose");
+        this->declare_parameter<std::string>("utm_topic_sub", "/nissan9/gps/nova/bestutm");
+        this->declare_parameter<std::string>("inspva_topic_sub", "/nissan9/gps/nova/inspva");
         this->declare_parameter<bool>("debug_publish", false);
 
         this->get_parameter("x_coord_offset", m_x_coord_offset_);
@@ -61,7 +61,7 @@ public:
         // additional publisher for translated pose
         if (debug_pub)
         {
-            m_pose_pub_debug_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("current_pose_debug_original", 10); // TODO: this is only temporary
+            m_pose_pub_debug_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("/nissan9/gps/nova/current_pose_debug_original", 10); // TODO: this is only temporary
         }
         m_utm_sub_ = this->create_subscription<novatel_oem7_msgs::msg::BESTUTM>(m_utm_topic_, 10, std::bind(&CurrentPoseFromTf::utm_callback, this, _1));
         m_inspva_sub_ = this->create_subscription<novatel_oem7_msgs::msg::INSPVA>(m_inspva_topic_, 10, std::bind(&CurrentPoseFromTf::inspva_callback, this, _1));
@@ -190,16 +190,16 @@ private:
     geometry_msgs::msg::PoseStamped m_currentPose;
     // TODO: parameters
     std::string m_frame_id_ = "map";
-    std::string m_child_frame_id_ = "lexus3/base_link";
+    std::string m_child_frame_id_ = "nissan9/base_link";
     std::string m_z_coord_ref_switch_ = "orig"; // orig or exact
     double m_x_coord_offset_ = 0.0;
     double m_y_coord_offset_ = 0.0;
     double m_z_coord_exact_height_ = 1.9;
     double m_z_coord_start_ = 0.0;
     double m_z_coord_orig_offset_ = 0.0;
-    std::string m_pose_topic_ = "/lexus3/gps/nova/current_pose";
-    std::string m_utm_topic_ = "/lexus3/nova/bestutm";
-    std::string m_inspva_topic_ = "/lexus3/nova/inspva";
+    std::string m_pose_topic_ = "/nissan9/gps/nova/current_pose";
+    std::string m_utm_topic_ = "/nissan9/gps/nova/bestutm";
+    std::string m_inspva_topic_ = "/nissan9/gps/nova/inspva";
     bool debug_pub = false;
     bool first_run_z_coord = true;
 };

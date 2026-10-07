@@ -1,8 +1,8 @@
 ## runs left and right c2 cameras
-# /lexus3/camera/camera0/camera_info
-# /lexus3/camera/camera0/image_rect_color
-# /lexus3/camera/camera1/camera_info
-# /lexus3/camera/camera1/image_rect_color
+# /nissan9/camera/camera0/camera_info
+# /nissan9/camera/camera0/image_rect_color
+# /nissan9/camera/camera1/camera_info
+# /nissan9/camera/camera1/image_rect_color
 
 import argparse
 import os

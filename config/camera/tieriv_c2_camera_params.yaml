@@ -3,7 +3,7 @@
       video_device: "/dev/video0"
       framerate: 10.0
       io_method: "mmap"
-      frame_id: "c2_camera_link"
+      frame_id: "nissan9/c2_camera_link"
       pixel_format: "uyvy"  # see usb_cam/supported_formats for list of supported formats
       av_device_format: "UYVY422"
       image_width: 2880
