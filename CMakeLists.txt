@@ -18,6 +18,7 @@ find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(novatel_oem7_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(visualization_msgs REQUIRED)
 
 
 set(ament_dependencies
@@ -29,6 +30,7 @@ set(ament_dependencies
   tf2_geometry_msgs
   novatel_oem7_msgs
   nav_msgs
+  visualization_msgs
 )
 
 
@@ -39,6 +41,9 @@ ament_target_dependencies(global_parameter ${ament_dependencies})
 
 add_executable(nova_oem7_to_tf src/nova_oem7_to_tf.cpp)
 ament_target_dependencies(nova_oem7_to_tf ${ament_dependencies})
+
+add_executable(nissan_marker_publisher src/nissan_marker_publisher.cpp)
+ament_target_dependencies(nissan_marker_publisher rclcpp visualization_msgs)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -55,13 +60,14 @@ endif()
 install(TARGETS
   global_parameter
   nova_oem7_to_tf
+  nissan_marker_publisher
   DESTINATION lib/${PROJECT_NAME}
 )
 
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME})
 
-install(DIRECTORY config
+install(DIRECTORY config param meshes
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
