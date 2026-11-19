@@ -1,8 +1,8 @@
 ## runs left and right c2 cameras
 # /nissan9/camera/camera0/camera_info
-# /nissan9/camera/camera0/image_rect_color
+# /nissan9/camera/camera0/image_compressed
 # /nissan9/camera/camera1/camera_info
-# /nissan9/camera/camera1/image_rect_color
+# /nissan9/camera/camera1/image_compressed
 
 import argparse
 import os
@@ -12,8 +12,10 @@ from typing import List, Optional
 from ament_index_python.packages import get_package_share_directory
 from pydantic import BaseModel, root_validator, validator
 from launch import LaunchDescription  
-from launch.actions import TimerAction 
+from launch.actions import DeclareLaunchArgument, TimerAction
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node  
+from launch_ros.parameter_descriptions import ParameterValue
 
 nissan_bringup_pkg_dir = get_package_share_directory('nissan_bringup')
 
@@ -37,11 +39,7 @@ class CameraConfig(BaseModel):
         if name and not remappings:
             # Automatically set remappings if name is set
             remappings = [
-                ('image_raw', f'/nissan9/camera/{name}/image_rect_color'),
-                ## TODO: not even publishing these topics?
                 ('image_raw/compressed', f'/nissan9/camera/{name}/image_compressed'),
-                ('image_raw/compressedDepth', f'/nissan9/camera/{name}/compressedDepth'),
-                ('image_raw/theora', f'/nissan9/camera/{name}/image_raw/theora'),
                 ('camera_info', f'/nissan9/camera/{name}/camera_info'),
             ]
         values['remappings'] = remappings
@@ -80,7 +78,14 @@ def generate_launch_description():
             package='usb_cam', executable='usb_cam_node_exe', output='screen',
             name=CAMERAS[0].name,
             namespace=CAMERAS[0].namespace,
-            parameters=[CAMERAS[0].param_path],
+            parameters=[
+                CAMERAS[0].param_path,
+                {
+                    'image_raw.enable_pub_plugins': ['image_transport/compressed'],
+                    'output_width': ParameterValue(LaunchConfiguration('image_width'), value_type=int),
+                    'output_height': ParameterValue(LaunchConfiguration('image_height'), value_type=int),
+                },
+            ],
             remappings=CAMERAS[0].remappings
         )
 
@@ -94,6 +99,14 @@ def generate_launch_description():
 
 
     return LaunchDescription([
+        DeclareLaunchArgument(
+            'image_width', default_value='1296',
+            description='Published image width in pixels. Use 0 for the capture width.',
+        ),
+        DeclareLaunchArgument(
+            'image_height', default_value='720',
+            description='Published image height in pixels. Use 0 for the capture height.',
+        ),
         TimerAction(period=0.0, actions=[camera_node]),
         # TimerAction(period=5.0, actions=[camera_node1]),
     ])
