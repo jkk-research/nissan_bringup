@@ -1,12 +1,16 @@
 
 import os
+import sys
 import yaml
 
 from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration 
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, LogInfo
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # launch/
+import nissan_tf_config
 
 PKG = "novatel_oem7_driver"
 nissan_nova_namespace = '/nissan9/gps/nova'
@@ -37,6 +41,8 @@ def arg(name, default_value, description):
 
     
 def generate_launch_description():
+    # Site and base_link source: config/tf/localization.yaml + map_origins.yaml
+    loc = nissan_tf_config.localization()
 
     node = Node(
         package=PKG,
@@ -87,10 +93,8 @@ def generate_launch_description():
         parameters=[
              {
                 'use_sim_time': False,
-                'x_coord_offset': -697237.0,  # map_gyor_0
-                # 'x_coord_offset': -639770.0, # map_zala_0
-                'y_coord_offset': -5285644.0,  # map_gyor_0
-                # 'y_coord_offset': -5195040.0, # map_zala_0
+                'x_coord_offset': -float(loc['origin']['x']),  # selected map_origin
+                'y_coord_offset': -float(loc['origin']['y']),
                 'z_coord_exact_height': 1.9,
                 'z_coord_offset_plus': -112.0,
                 'frame_id': 'map',
@@ -105,6 +109,8 @@ def generate_launch_description():
                 'utm_topic_sub': 'bestutm',
                 'inspva_topic_sub': 'inspva',
                 'debug_publish': False,
+                # map -> nissan9/base_link TF; disable if another source (e.g. Duro) provides base_link
+                'publish_tf': LaunchConfiguration('publish_tf'),
              }
         ]
     )
@@ -112,8 +118,11 @@ def generate_launch_description():
     ip_arg   = arg('oem7_ip_addr', '192.168.11.110',               'IP Address of Oem7 Receiver, e.g. 192.168.1.2')
     port_arg = arg('oem7_port',   '3002',              'TCP or UDP port, e.g. 3002')
     if_arg   = arg('oem7_if',     'Oem7ReceiverTcp',   'Interface Type: Oem7ReceiverTcp or Oem7ReceiverUdp')
+    tf_arg   = arg('publish_tf',  'true' if loc['base_link_source'] == 'nova' else 'false',
+                   'Publish map -> nissan9/base_link TF (default from config/tf/localization.yaml)')
+    info     = LogInfo(msg=f"[gps_nova] base_link_source: {loc['base_link_source']}, map_origin: {loc['map_origin']}")
     
-    return LaunchDescription([ip_arg, port_arg, if_arg, 
+    return LaunchDescription([ip_arg, port_arg, if_arg, tf_arg, info,
                               node,convert_node])
 
     

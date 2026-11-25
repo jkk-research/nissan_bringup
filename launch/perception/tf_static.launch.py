@@ -4,70 +4,49 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 
+import sys
 from os import path
+sys.path.insert(0, path.dirname(path.dirname(path.abspath(__file__))))  # launch/
+import nissan_tf_config
 
 def generate_launch_description():
 
-    return LaunchDescription([
+    # map -> map_gyor_0, map_zala_0, ... from config/tf/map_origins.yaml
+    map_origin_tfs = [
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            name='gyor0_tf_publisher',
+            name=f'{name}_tf_publisher',
             output='screen',
             arguments=[
-                '--x',  '697237.0',
-                '--y',  '5285644.0',
-                '--z',  '0.0',
-                '--qx', '0',
-                '--qy', '0',
-                '--qz', '0',
-                '--qw', '1',
-
-                '--frame-id',       'map', 
-                '--child-frame-id', 'map_gyor_0'],
-        ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='zala0_tf_publisher',
-            output='screen',
-            arguments=[
-                '--x',  '639770.0',
-                '--y',  '5195040.0',
-                '--z',  '0.0',
+                '--x',  str(float(o['x'])),
+                '--y',  str(float(o['y'])),
+                '--z',  str(float(o.get('z', 0.0))),
                 '--qx', '0',
                 '--qy', '0',
                 '--qz', '0',
                 '--qw', '1',
 
                 '--frame-id',       'map',
-                '--child-frame-id', 'map_zala_0'],
-        ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='base_gps_tf_publisher',
-            output='screen',
-            arguments=[
-                '--x',      '0.196',
-                '--y',      '0.0',
-                '--z',      '-1.1',
-                '--yaw',    '0',
-                '--pitch',  '0',
-                '--roll',   '0',
+                '--child-frame-id', name],
+        )
+        for name, o in nissan_tf_config.map_origins().items()
+    ]
 
-                '--frame-id',       'nissan9/gps', 
-                '--child-frame-id', 'nissan9/base_link'],
-        ),
+    return LaunchDescription(map_origin_tfs + [
+        # nissan9/gps -> nissan9/base_link is published by gps_duro.launch.py,
+        # because it is only valid when the Duro provides the vehicle pose
+        # (the Novatel publishes map -> nissan9/base_link directly).
+        # Duro antenna: same position as nissan9/gps (inverse of gps -> base_link)
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             name='duro_gps_tf_publisher',
             output='screen',
             arguments=[
-                '--x',      '0.0',
+                '--x',      '-0.196',
                 '--y',      '0.0',
-                '--z',      '0.2',
+                '--z',      '1.1',
                 '--yaw',    '0.0261799',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',
@@ -81,9 +60,9 @@ def generate_launch_description():
             name='duro_gps_imu_tf_publisher',
             output='screen',
             arguments=[
-                '--x',      '0.0',
+                '--x',      '-0.196',
                 '--y',      '0.0',
-                '--z',      '0.2',
+                '--z',      '1.1',
                 '--yaw',    '0.0261799',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',

@@ -1,0 +1,12 @@
+# Local map origins, given in the global `map` frame (UTM zone 33N, meters).
+# tf_static.launch.py publishes `map -> <name>` for every entry,
+# gps_nova.launch.py subtracts the origin selected in localization.yaml.
+map_origins:
+  map_gyor_0:
+    x: 697237.0
+    y: 5285644.0
+    z: 0.0
+  map_zala_0:
+    x: 639770.0
+    y: 5195040.0
+    z: 0.0

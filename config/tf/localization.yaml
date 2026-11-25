@@ -1,0 +1,10 @@
+# Which source provides nissan9/base_link, and at which site we are.
+#
+# base_link_source:
+#   nova: Novatel (nova_oem7_to_tf) publishes map -> nissan9/base_link
+#   duro: Duro publishes map -> nissan9/gps, and gps_duro.launch.py adds nissan9/gps -> nissan9/base_link
+# Only the selected source publishes the base_link TF, so nissan9/base_link always has exactly one parent.
+base_link_source: nova
+
+# Key from map_origins.yaml (e.g. map_gyor_0, map_zala_0)
+map_origin: map_gyor_0

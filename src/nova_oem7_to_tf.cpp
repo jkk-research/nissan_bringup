@@ -44,6 +44,7 @@ public:
         this->declare_parameter<std::string>("utm_topic_sub", "/nissan9/gps/nova/bestutm");
         this->declare_parameter<std::string>("inspva_topic_sub", "/nissan9/gps/nova/inspva");
         this->declare_parameter<bool>("debug_publish", false);
+        this->declare_parameter<bool>("publish_tf", true);
 
         this->get_parameter("x_coord_offset", m_x_coord_offset_);
         this->get_parameter("y_coord_offset", m_y_coord_offset_);
@@ -56,6 +57,7 @@ public:
         this->get_parameter("utm_topic_sub", m_utm_topic_);
         this->get_parameter("inspva_topic_sub", m_inspva_topic_);
         this->get_parameter("debug_publish", debug_pub);
+        this->get_parameter("publish_tf", m_publish_tf_);
 
         m_pose_pub_ = this->create_publisher<geometry_msgs::msg::PoseStamped>(m_pose_topic_, 10);
         // additional publisher for translated pose
@@ -68,7 +70,7 @@ public:
         m_tfBroadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
         RCLCPP_INFO_STREAM(this->get_logger(), "nova_oem7_to_tf node started");
         RCLCPP_INFO_STREAM(this->get_logger(), "nova coord offset: " << m_x_coord_offset_ << ", " << m_y_coord_offset_ << ", " << m_z_coord_exact_height_);
-        RCLCPP_INFO_STREAM(this->get_logger(), "nova frame_id: " << m_frame_id_ << ", child_frame_id: " << m_child_frame_id_);
+        RCLCPP_INFO_STREAM(this->get_logger(), "nova frame_id: " << m_frame_id_ << ", child_frame_id: " << m_child_frame_id_ << ", publish_tf: " << (m_publish_tf_ ? "true" : "false"));
         RCLCPP_INFO_STREAM(this->get_logger(), "nova utm_topic: " << m_utm_topic_);
 
         if (m_z_coord_ref_switch_.compare("exact") == 0)
@@ -124,26 +126,7 @@ private:
             m_currentPose.pose.position.z = msg->height + m_z_coord_orig_offset_;
         }
 
-        geometry_msgs::msg::TransformStamped transformStamped;
-        transformStamped.header.stamp = msg->header.stamp;
-        transformStamped.header.frame_id = m_frame_id_;
-        transformStamped.child_frame_id = m_child_frame_id_;
-        transformStamped.transform.translation.x = msg->easting + m_x_coord_offset_;
-        transformStamped.transform.translation.y = msg->northing + m_y_coord_offset_;
-        transformStamped.transform.translation.z = m_currentPose.pose.position.z;
-        if (m_z_coord_ref_switch_.compare("exact") == 0)
-        {
-            transformStamped.transform.translation.z = m_z_coord_exact_height_;
-        }
-        else
-        {
-            transformStamped.transform.translation.z = msg->height; // original height
-        }
-        transformStamped.transform.rotation = m_currentPose.pose.orientation;
-        // Publish tf
-        m_tfBroadcaster_->sendTransform(transformStamped);
-        // Publish the current pose
-        // Publish a translated copy of the current pose on current_pose2
+        // Shift the antenna pose to the rear axle center (the origin of base_link).
         geometry_msgs::msg::PoseStamped translated_pose = m_currentPose;
         // Apply translation in the pose local frame.
         const double yaw = tf2::getYaw(translated_pose.pose.orientation);
@@ -154,9 +137,20 @@ private:
         translated_pose.pose.position.x += offset_x * std::cos(yaw) - offset_y * std::sin(yaw);
         translated_pose.pose.position.y += offset_x * std::sin(yaw) + offset_y * std::cos(yaw);
 
-        // // Apply translation: x = x - 1.5, y = y + 0.2 Faulty logic
-        // translated_pose.pose.position.x = translated_pose.pose.position.x - 1.585;
-        // translated_pose.pose.position.y = translated_pose.pose.position.y + 0.2755;
+        // The TF uses the same (rear axle) position and Z as the published pose.
+        if (m_publish_tf_)
+        {
+            geometry_msgs::msg::TransformStamped transformStamped;
+            transformStamped.header.stamp = msg->header.stamp;
+            transformStamped.header.frame_id = m_frame_id_;
+            transformStamped.child_frame_id = m_child_frame_id_;
+            transformStamped.transform.translation.x = translated_pose.pose.position.x;
+            transformStamped.transform.translation.y = translated_pose.pose.position.y;
+            transformStamped.transform.translation.z = translated_pose.pose.position.z;
+            transformStamped.transform.rotation = translated_pose.pose.orientation;
+            m_tfBroadcaster_->sendTransform(transformStamped);
+        }
+
         if (debug_pub)
         {
             m_pose_pub_debug_->publish(m_currentPose);
@@ -201,6 +195,7 @@ private:
     std::string m_utm_topic_ = "/nissan9/gps/nova/bestutm";
     std::string m_inspva_topic_ = "/nissan9/gps/nova/inspva";
     bool debug_pub = false;
+    bool m_publish_tf_ = true;
     bool first_run_z_coord = true;
 };
 
