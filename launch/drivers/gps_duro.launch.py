@@ -60,9 +60,9 @@ def generate_launch_description():
             output='screen',
             condition=IfCondition(LaunchConfiguration('publish_base_link_tf')),
             arguments=[
-                '--x',      '0.196',
+                '--x',      '0.163',
                 '--y',      '0.0',
-                '--z',      '-1.1',
+                '--z',      '-1.167',
                 '--yaw',    '0',
                 '--pitch',  '0',
                 '--roll',   '0',

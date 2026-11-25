@@ -44,9 +44,9 @@ def generate_launch_description():
             name='duro_gps_tf_publisher',
             output='screen',
             arguments=[
-                '--x',      '-0.196',
+                '--x',      '-0.163',
                 '--y',      '0.0',
-                '--z',      '1.1',
+                '--z',      '1.167',
                 '--yaw',    '0.0261799',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',
@@ -60,9 +60,9 @@ def generate_launch_description():
             name='duro_gps_imu_tf_publisher',
             output='screen',
             arguments=[
-                '--x',      '-0.196',
+                '--x',      '-0.022',
                 '--y',      '0.0',
-                '--z',      '1.1',
+                '--z',      '0.612',
                 '--yaw',    '0.0261799',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',
@@ -70,22 +70,22 @@ def generate_launch_description():
                 '--frame-id',       'nissan9/base_link', 
                 '--child-frame-id', 'nissan9/duro_gps_imu'],
         ),
-        Node(
+         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            name='zed2_camera_center_tf_publisher',
+            name='c2_camera_center_tf_publisher',
             output='screen',
             arguments=[
-                '--x',      '1.874',
+                '--x',      '1.990',
                 '--y',      '0.0',
-                '--z',      '1.286',
+                '--z',      '1.255',
                 '--yaw',    '0.0',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',
 
                 '--frame-id',       'nissan9/base_link',
-                '--child-frame-id', 'nissan9/zed2_camera_link'],
-        ),
+                '--child-frame-id', 'nissan9/c2_camera_link'],
+            ),
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
@@ -94,7 +94,7 @@ def generate_launch_description():
             arguments=[
                 '--x',      '0.0',
                 '--y',      '0.0',
-                '--z',      '-0.316',
+                '--z',      '-0.3',
                 '--yaw',    '0.0',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',
@@ -105,115 +105,71 @@ def generate_launch_description():
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            name='os_left_tf_publisher',
+            name='os_sensor_tf_publisher',
             output='screen',
             arguments=[
-                '--x',      '1.769',
+                '--x',      '1.832',
                 '--y',      '0.58',
-                '--z',      '1.278',
+                '--z',      '1.286',
                 '--yaw',    '0.0',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',
 
                 '--frame-id',       'nissan9/base_link',
-                '--child-frame-id', 'nissan9/os_left'],
+                '--child-frame-id', 'nissan9/os_sensor'],
+        ),
+       
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='os_sensor_data_frame',
+            output='screen',
+            arguments=[
+                '--x',      '0.0',
+                '--y',      '0.0',
+                '--z',      '0.0',
+                '--yaw',    '0.0',
+                '--pitch',  '0.0',
+                '--roll',   '0.0',
+
+                '--frame-id',       'nissan9/os_sensor',
+                '--child-frame-id', 'nissan9/os_sensor_data_frame'],
         ),
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            name='os_right_tf_publisher',
+            name='os_sensor_imu_data_frame',
             output='screen',
             arguments=[
-                '--x',      '1.769',
-                '--y',      '-0.58',
-                '--z',      '1.278',
+                '--x',      '0.0',
+                '--y',      '0.0',
+                '--z',      '0.0',
+                '--yaw',    '0.0',
+                '--pitch',  '0.0',
+                '--roll',   '0.0',
+
+                '--frame-id',       'nissan9/os_sensor',
+                '--child-frame-id', 'nissan9/os_sensor_imu_data_frame'],
+        ),
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='fixposition_tf_publisher',
+            output='screen',
+            arguments=[
+                '--x',      '1.809',
+                '--y',      '-0.371',
+                '--z',      '1.294',
                 '--yaw',    '0.0',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',
 
                 '--frame-id',       'nissan9/base_link',
-                '--child-frame-id', 'nissan9/os_right'],
+                '--child-frame-id', 'FP_POI'],
         ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='os_sensor_lidar_left',
-            output='screen',
-            arguments=[
-                '--x',      '0.0',
-                '--y',      '0.0',
-                '--z',      '0.0',
-                '--yaw',    '0.0',
-                '--pitch',  '0.0',
-                '--roll',   '0.0',
+       
 
-                '--frame-id',       'nissan9/os_left',
-                '--child-frame-id', 'nissan9/os_left_data_frame'],
-        ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='os_sensor_imu_left',
-            output='screen',
-            arguments=[
-                '--x',      '0.0',
-                '--y',      '0.0',
-                '--z',      '0.0',
-                '--yaw',    '0.0',
-                '--pitch',  '0.0',
-                '--roll',   '0.0',
-
-                '--frame-id',       'nissan9/os_left',
-                '--child-frame-id', 'nissan9/os_left_imu_data_frame'],
-        ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='os_sensor_lidar_right',
-            output='screen',
-            arguments=[
-                '--x',      '0.0',
-                '--y',      '0.0',
-                '--z',      '0.0',
-                '--yaw',    '0.0',
-                '--pitch',  '0.0',
-                '--roll',   '0.0',
-
-                '--frame-id',       'nissan9/os_right',
-                '--child-frame-id', 'nissan9/os_right_data_frame'],
-        ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='os_sensor_imu_right',
-            output='screen',
-            arguments=[ 
-                '--x',      '0.0',
-                '--y',      '0.0',
-                '--z',      '0.0',
-                '--yaw',    '0.0',
-                '--pitch',  '0.0',
-                '--roll',   '0.0',
-
-                '--frame-id',       'nissan9/os_right',
-                '--child-frame-id', 'nissan9/os_right_imu_data_frame'],
-        ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='sick_tf_publisher',
-            output='screen',
-            arguments=[
-                '--x',      '3.707',
-                '--y',      '-0.351',
-                '--z',      '0.113',
-                '--yaw',    '0.0',
-                '--pitch',  '0.0',
-                '--roll',   '0.0',
-
-                '--frame-id',       'nissan9/base_link',
-                '--child-frame-id', 'nissan9/laser'],
-        ),
+       
         # IncludeLaunchDescription(
         #     PythonLaunchDescriptionSource(
         #         path.join(
