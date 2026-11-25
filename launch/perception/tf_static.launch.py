@@ -79,9 +79,9 @@ def generate_launch_description():
                 '--x',      '1.990',
                 '--y',      '0.0',
                 '--z',      '1.255',
-                '--yaw',    '0.0',
+                '--yaw',    '-1.57079632679',
                 '--pitch',  '0.0',
-                '--roll',   '0.0',
+                '--roll',   '-1.57079632679',
 
                 '--frame-id',       'nissan9/base_link',
                 '--child-frame-id', 'nissan9/c2_camera_link'],
@@ -111,46 +111,14 @@ def generate_launch_description():
                 '--x',      '1.832',
                 '--y',      '0.58',
                 '--z',      '1.286',
-                '--yaw',    '0.0',
+                '--yaw',    '-3.14159265359',
                 '--pitch',  '0.0',
                 '--roll',   '0.0',
 
                 '--frame-id',       'nissan9/base_link',
-                '--child-frame-id', 'nissan9/os_sensor'],
+                '--child-frame-id', 'nissan9/os_lidar'],
         ),
-       
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='os_sensor_data_frame',
-            output='screen',
-            arguments=[
-                '--x',      '0.0',
-                '--y',      '0.0',
-                '--z',      '0.0',
-                '--yaw',    '0.0',
-                '--pitch',  '0.0',
-                '--roll',   '0.0',
-
-                '--frame-id',       'nissan9/os_sensor',
-                '--child-frame-id', 'nissan9/os_sensor_data_frame'],
-        ),
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='os_sensor_imu_data_frame',
-            output='screen',
-            arguments=[
-                '--x',      '0.0',
-                '--y',      '0.0',
-                '--z',      '0.0',
-                '--yaw',    '0.0',
-                '--pitch',  '0.0',
-                '--roll',   '0.0',
-
-                '--frame-id',       'nissan9/os_sensor',
-                '--child-frame-id', 'nissan9/os_sensor_imu_data_frame'],
-        ),
+        
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',

@@ -6,7 +6,7 @@
     imu_port: 7503
     lidar_port: 7502
     sensor_frame: nissan9/os_sensor
-    laser_frame: nissan9/os_lidar
+    lidar_frame: nissan9/os_lidar
     imu_frame: nissan9/os_imu
 
     # if False, data are published with sensor data QoS. This is preferrable
